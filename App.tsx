@@ -6,43 +6,22 @@ import { useState } from 'react';
 import ScoreCard from './src/components/ScoreCard';
 
 export default function App() {
+  const [inputText, setInputText] = useState<string>("");
   const [searchName, setSearchName] = useState<string>("");
-  const [displayInfo, setDisplayInfo] = useState<string>("");
-
-  const renderText = (data: DataSet): React.ReactElement[] => {
-    const dataArray = Object.values(data);
-
-    return dataArray
-      .filter((user: UserType) => {
-        return user.name.toLowerCase() === displayInfo.toLowerCase()
-      })
-      .map((user: UserType) => (
-        <ScoreCard key={user.uid} name={user.name} rank={dataArray.indexOf(user)+1} bananas={user.bananas} />
-      ));
-
-  };
-
-  const renderTopTen = (data: DataSet): React.ReactElement[] => {
-    const dataArray = Object.values(data);
-
-    dataArray.sort((a: UserType, b: UserType) => b.bananas - a.bananas);
-  
-    return dataArray.slice(0, 10).map((user: UserType) => (
-      <ScoreCard key={user.uid} name={user.name} rank={dataArray.indexOf(user)+1} bananas={user.bananas} />
-    ));
-  };
 
   const handlePress = () => {
-    setDisplayInfo(searchName)
+    console.log(searchName)
+    setSearchName(inputText)
   }
 
   return (
     <View style={styles.container}>
+      <Text style={styles.title}>Banana Scoreboard</Text>
       <View style={styles.inputContainer}>
         <TextInput
           style={styles.textInput}
           placeholder='username'
-          onChangeText={(text) => setSearchName(text)}
+          onChangeText={(text) => setInputText(text)}
         />
         <TouchableOpacity
           style={styles.button}
@@ -52,7 +31,7 @@ export default function App() {
         </TouchableOpacity>
         <StatusBar style="auto" />
       </View>
-      {renderTopTen(data)}
+      <ScoreCard key={1} data={data} searchName={searchName}/>
     </View>
   );
 }
@@ -64,7 +43,12 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'center',
-    flexDirection: 'column'
+    flexDirection: 'column',
+    marginTop: 50
+  },
+  title: {
+    fontSize: 25,
+    marginBottom: 15,
   },
   inputContainer: {
     width: 400,

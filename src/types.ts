@@ -11,3 +11,5 @@ export type UserType = {
 export type DataSet = {
     [key: string] : UserType
 }
+
+export type TableData = [string, number, number];
