@@ -1,6 +1,7 @@
-import { View, Text, StyleSheet, FlatList, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, FlatList } from 'react-native';
 import React, { useEffect, useState } from 'react';
-import { DataSet, UserType, TableData } from '../types';
+import { DataSet, TableData } from '../types';
+import { tableData } from '../utils';
 
 interface ScoreCardProps {
   data: DataSet,
@@ -8,26 +9,13 @@ interface ScoreCardProps {
 }
 
 export default function ScoreCard({ data, searchName }: ScoreCardProps) {
+  
+  const tableHeads: string[] = ['Name', 'Rank', 'Bananas'];
+  const [dataArray, setDataArray] = useState<TableData[]>(tableData(data, searchName));
 
   useEffect(() => {
-    console.log(searchName)
+    setDataArray(tableData(data, searchName))
   }, [searchName])
-
-  const tableHeads: string[] = ['Name', 'Rank', 'Bananas'];
-
-  const tableData = (): TableData[] => {
-    const sortedArray = Object.values(data).sort((a: UserType, b: UserType) => b.bananas - a.bananas);
-
-    return sortedArray.slice(0, 10).map((user: UserType, index) => {
-      return [user.name, index+1, user.bananas]
-  });
-  }
-
-  const findName = (searchName: string) => {
-    return Object.values(data).filter(user => user.name.toLowerCase() === searchName.toLowerCase())
-  }
-
-  const [dataArray, setDataArray] = useState<TableData[]>(tableData());
 
   const renderTableHeader = () => {
     return (
@@ -62,14 +50,14 @@ export default function ScoreCard({ data, searchName }: ScoreCardProps) {
   };
 
   return (
-      <View style={styles.container}>
-        {renderTableHeader()}
-        <FlatList
-          data={dataArray}
-          renderItem={({ item }) => renderTableRow(item)}
-          keyExtractor={(item, index) => index.toString()}
-        />
-      </View>
+    <View style={styles.container}>
+      {renderTableHeader()}
+      <FlatList
+        data={dataArray}
+        renderItem={({ item }) => renderTableRow(item)}
+        keyExtractor={(item, index) => index.toString()}
+      />
+    </View>
   );
 };
 
@@ -80,7 +68,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     backgroundColor: '#fff',
     width: 300,
-    // height: 300
   },
   textSelected: {
     color: 'red'

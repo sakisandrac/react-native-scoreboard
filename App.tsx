@@ -1,7 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
-import { Button, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { data } from './src/data/data';
-import { DataSet, UserType } from './src/types'
 import { useState } from 'react';
 import ScoreCard from './src/components/ScoreCard';
 
@@ -10,9 +9,8 @@ export default function App() {
   const [searchName, setSearchName] = useState<string>("");
 
   const handlePress = () => {
-    console.log(searchName)
-    setSearchName(inputText)
-  }
+    setSearchName(inputText);
+  };
 
   return (
     <View style={styles.container}>
@@ -31,7 +29,7 @@ export default function App() {
         </TouchableOpacity>
         <StatusBar style="auto" />
       </View>
-      <ScoreCard key={1} data={data} searchName={searchName}/>
+      {searchName.length > 0 && <ScoreCard key={1} data={data} searchName={searchName}/>}
     </View>
   );
 }
