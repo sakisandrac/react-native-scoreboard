@@ -1,17 +1,42 @@
 import { StatusBar } from 'expo-status-bar';
 import { Image, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { data } from './src/data/data';
-import { useState } from 'react';
+import { Dispatch, useEffect, useState } from 'react';
 import ScoreCard from './src/components/ScoreCard';
 import banana from './assets/love.png';
+import { connect } from 'react-redux';
+import { ActionTypes, setInputText, setSearchName } from './src/redux/actions';
+import * as Font from 'expo-font';
+import VinaSansRegular from './assets/fonts/VinaSans-Regular.ttf';
 
+interface AppProps {
+  inputText: string;
+  searchName: string;
+  setInputText: (text: string) => void;
+  setSearchName: (name: string) => void;
+}
+
+// function App({ inputText, searchName, setInputText, setSearchName }: AppProps) {
 export default function App() {
   const [inputText, setInputText] = useState<string>("");
   const [searchName, setSearchName] = useState<string>("");
+  const [fontsLoaded, setFontsLoaded] = useState(false);
+
+  const loadFonts = async () => {
+    await Font.loadAsync({
+      'vina-sans-regular': VinaSansRegular,
+    });
+    setFontsLoaded(true);
+  };
+
+  useEffect(() => {
+    loadFonts()
+  }, [])
 
   const handlePress = () => {
     setSearchName(inputText);
   };
+
 
   return (
     <View style={styles.container}>
@@ -19,13 +44,13 @@ export default function App() {
         source={banana}
         style={styles.img}
         />}
-      <Text style={styles.title}>Banana Scoreboard</Text>
+      <Text style={styles.title}>The Banana Scoreboard</Text>
       <Text style={styles.text}>Enter a name to search the scoreboard</Text>
       <View style={styles.inputContainer}>
         <TextInput
           style={styles.textInput}
-          placeholder='username'
           onChangeText={(text) => setInputText(text)}
+          value={inputText} 
         />
         <TouchableOpacity
           style={styles.button}
@@ -39,6 +64,18 @@ export default function App() {
     </View>
   );
 }
+
+const mapStateToProps = (state: { inputText: string; searchName: string }) => ({
+  inputText: state.inputText,
+  searchName: state.searchName,
+});
+
+const mapDispatchToProps = (dispatch: Dispatch<ActionTypes>) => ({
+  setInputText: (text: string) => dispatch(setInputText(text)),
+  setSearchName: (name: string) => dispatch(setSearchName(name)),
+});
+
+// export default connect(mapStateToProps, mapDispatchToProps)(App);
 
 const styles = StyleSheet.create({
   container: {
@@ -55,8 +92,9 @@ const styles = StyleSheet.create({
     width: 150
   },
   title: {
-    fontSize: 25,
+    fontSize: 27,
     marginBottom: 15,
+    fontFamily: 'vina-sans-regular'
   },
   inputContainer: {
     width: 400,

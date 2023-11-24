@@ -1,7 +1,7 @@
 import { View, Text, StyleSheet, FlatList } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import { DataSet, TableData } from '../types';
-import { tableData } from '../utils';
+import { findName, tableData } from '../utils';
 
 interface ScoreCardProps {
   data: DataSet,
@@ -9,12 +9,19 @@ interface ScoreCardProps {
 }
 
 export default function ScoreCard({ data, searchName }: ScoreCardProps) {
-  
+
   const tableHeads: string[] = ['Name', 'Rank', 'Bananas'];
   const [dataArray, setDataArray] = useState<TableData[]>(tableData(data, searchName));
+  const [error, setError] = useState<boolean>(false);
 
   useEffect(() => {
-    setDataArray(tableData(data, searchName))
+    if (!findName(searchName, data).length) {
+      setError(true)
+    } else {
+      setDataArray(tableData(data, searchName))
+    }
+
+    return () => setError(false);
   }, [searchName])
 
   const renderTableHeader = () => {
@@ -51,12 +58,19 @@ export default function ScoreCard({ data, searchName }: ScoreCardProps) {
 
   return (
     <View style={styles.container}>
-      {renderTableHeader()}
-      <FlatList
-        data={dataArray}
-        renderItem={({ item }) => renderTableRow(item)}
-        keyExtractor={(item, index) => index.toString()}
-      />
+      {error ?
+        <Text>User not found, please search a different name</Text> :
+        <View style={styles.table}>
+          {renderTableHeader()}
+          <FlatList
+            data={dataArray}
+            renderItem={({ item }) => renderTableRow(item)}
+            keyExtractor={(item, index) => index.toString()}
+          />
+        </View>
+      }
+
+
     </View>
   );
 };
@@ -71,7 +85,9 @@ const styles = StyleSheet.create({
     marginBottom: 30,
     borderRadius: 20,
     borderWidth: .5,
-
+  },
+  table : {
+    flex: 1
   },
   textSelected: {
     color: 'red'
