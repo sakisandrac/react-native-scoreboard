@@ -68,6 +68,10 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     backgroundColor: '#fff',
     width: 300,
+    marginBottom: 30,
+    borderRadius: 20,
+    borderWidth: .5,
+
   },
   textSelected: {
     color: 'red'
