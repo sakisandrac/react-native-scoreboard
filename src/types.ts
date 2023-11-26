@@ -13,3 +13,11 @@ export type DataSet = {
 }
 
 export type TableData = [string, number, number];
+
+export interface Options {
+    [key: string]: UserType[];
+  }
+
+export type Options = {
+
+}

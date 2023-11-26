@@ -41,7 +41,11 @@ export default function Home() {
                     source={banana}
                     style={styles.img}
                 />}
-                <Text style={styles.title}>The Banana Scoreboard</Text>
+                <Text style={{
+                    fontFamily: fontsLoaded ? 'vina-sans-regular' : 'sans-serif', 
+                    fontSize: 24,
+                    marginBottom: 10
+                    }}>The Banana Scoreboard</Text>
                 <Text style={styles.text}>Enter a name to search the scoreboard</Text>
                 <View style={styles.inputContainer}>
                     <TextInput
@@ -70,16 +74,11 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         flexDirection: 'column',
-        marginTop: 50,
+        marginTop: 20,
     },
     img: {
-        height: 150,
-        width: 150
-    },
-    title: {
-        fontSize: 27,
-        marginBottom: 15,
-        fontFamily: 'vina-sans-regular'
+        height: 100,
+        width: 100
     },
     inputContainer: {
         width: 400,
