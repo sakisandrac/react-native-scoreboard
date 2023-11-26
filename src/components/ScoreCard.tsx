@@ -1,7 +1,10 @@
-import { View, Text, StyleSheet, FlatList } from 'react-native';
+import { View, Text, StyleSheet, FlatList, Image } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import { DataSet, TableData } from '../types';
 import { findName, tableData } from '../utils';
+import { useSelector, useDispatch } from 'react-redux';
+import { setDataArray, setError } from '../redux/actions';
+import monkey from '../../assets/monkey.png';
 
 interface ScoreCardProps {
   data: DataSet,
@@ -9,20 +12,23 @@ interface ScoreCardProps {
 }
 
 export default function ScoreCard({ data, searchName }: ScoreCardProps) {
-
+  
   const tableHeads: string[] = ['Name', 'Rank', 'Bananas'];
-  const [dataArray, setDataArray] = useState<TableData[]>(tableData(data, searchName));
-  const [error, setError] = useState<boolean>(false);
+  const dispatch = useDispatch();
+  const dataArray = useSelector((state: any) => state.userReducer.dataArray);
+  const error = useSelector((state: any) => state.userReducer.error);
 
   useEffect(() => {
     if (!findName(searchName, data).length) {
-      setError(true)
+      dispatch(setError(true));
     } else {
-      setDataArray(tableData(data, searchName))
+      dispatch(setDataArray(tableData(data, searchName)));
     }
 
-    return () => setError(false);
-  }, [searchName])
+    return () => {
+      dispatch(setError(false))
+    };
+  }, [searchName, data, dispatch]);
 
   const renderTableHeader = () => {
     return (
@@ -59,7 +65,10 @@ export default function ScoreCard({ data, searchName }: ScoreCardProps) {
   return (
     <View style={styles.container}>
       {error ?
-        <Text>User not found, please search a different name</Text> :
+        <View style={styles.errorContainer}>
+          <Text style={styles.errorMsg}>User not found, please search a different name</Text>
+          <Image source={monkey} style={styles.img}/> 
+        </View>:
         <View style={styles.table}>
           {renderTableHeader()}
           <FlatList
@@ -69,8 +78,6 @@ export default function ScoreCard({ data, searchName }: ScoreCardProps) {
           />
         </View>
       }
-
-
     </View>
   );
 };
@@ -86,7 +93,7 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     borderWidth: .5,
   },
-  table : {
+  table: {
     flex: 1
   },
   textSelected: {
@@ -112,4 +119,15 @@ const styles = StyleSheet.create({
     padding: 10,
     alignItems: 'center',
   },
+  errorMsg: {
+    textAlign: 'center'
+  },
+  errorContainer: {
+    alignItems: 'center',
+  },
+  img: {
+    marginTop: 20,
+    height: 150,
+    width: 150
+  }
 });
