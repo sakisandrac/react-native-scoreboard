@@ -10,7 +10,7 @@ const initialState: StateType = {
   searchName: '',
 };
 
-const rootReducer = (state = initialState, action: ActionTypes): StateType => {
+const userReducer = (state = initialState, action: ActionTypes): StateType => {
   switch (action.type) {
     case SET_INPUT_TEXT:
       return { ...state, inputText: action.payload };
@@ -21,4 +21,4 @@ const rootReducer = (state = initialState, action: ActionTypes): StateType => {
   }
 };
 
-export default rootReducer;
+export default userReducer;
