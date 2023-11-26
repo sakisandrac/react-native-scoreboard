@@ -8,11 +8,13 @@ import * as Font from 'expo-font';
 import VinaSansRegular from '../../assets/fonts/VinaSans-Regular.ttf';
 import { useSelector, useDispatch } from 'react-redux';
 import { setInputText, setSearchName } from '../redux/actions';
-import React from 'react'
+import React from 'react';
 
 export default function Home() {
 
     const [fontsLoaded, setFontsLoaded] = useState(false);
+    const { searchName, inputText } = useSelector((state: any) => state.userReducer)
+    const dispatch = useDispatch();
 
     const loadFonts = async () => {
         await Font.loadAsync({
@@ -22,15 +24,13 @@ export default function Home() {
     };
 
     useEffect(() => {
-        loadFonts()
-    }, [])
-
-    const { searchName, inputText } = useSelector((state: any) => state.userReducer)
-    const dispatch = useDispatch();
+        loadFonts();
+    }, []);
 
     const handlePress = () => {
         dispatch(setSearchName(inputText));
     };
+
     return (
         <View style={styles.container}>
             {<Image
@@ -61,7 +61,6 @@ export default function Home() {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        width: 400,
         backgroundColor: '#FFFFE9',
         alignItems: 'center',
         justifyContent: 'center',
@@ -75,7 +74,7 @@ const styles = StyleSheet.create({
     title: {
         fontSize: 27,
         marginBottom: 15,
-        //   fontFamily: 'vina-sans-regular'
+          fontFamily: 'vina-sans-regular'
     },
     inputContainer: {
         width: 400,
