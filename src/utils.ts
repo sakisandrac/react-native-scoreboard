@@ -1,15 +1,58 @@
-import { DataSet, TableData, UserType } from "./types";
+import { DataSet, Options, TableData, UserType } from "./types";
 
 export const findName = (searchName: string, data: DataSet) => {
     return Object.values(data).filter(user => user.name.toLowerCase() === searchName.toLowerCase());
 };
 
-export const tableData = (data: DataSet, searchName: string): TableData[] => {
-    const sortedArray = Object.values(data).sort((a: UserType, b: UserType) => b.bananas - a.bananas);
-
-    let topTen: TableData[] = sortedArray.slice(0, 10).map((user: UserType, index) => {
+const findTopTen = (data: UserType[]): TableData[] => {
+    return data.slice(0, 10).map((user: UserType, index) => {
         return [user.name, index + 1, user.bananas];
+    })
+}
+
+const sortByBananas = (data: UserType[]): UserType[] => {
+    return data.slice().sort((a: UserType, b: UserType) => b.bananas - a.bananas);
+  };
+  
+  const sortAlphabetically = (data: UserType[]): UserType[] => {
+    return data.slice().sort((a: UserType, b: UserType) => {
+      const nameA = a.name.toLowerCase();
+      const nameB = b.name.toLowerCase();
+      return nameA.localeCompare(nameB);
     });
+  };
+  
+  const sortByBananasAndName = (data: UserType[]): UserType[] => {
+    return data.slice().sort((a: UserType, b: UserType) => {
+      if (b.bananas !== a.bananas) {
+        return a.bananas - b.bananas;
+      } else {
+        const nameA = a.name.toLowerCase();
+        const nameB = b.name.toLowerCase();
+        return nameA.localeCompare(nameB);
+      }
+    });
+  };
+  
+  export const sortData = (data: DataSet, type: string): TableData[] => {
+    const filteredData = Object.values(data).filter((user: UserType) => user.name.trim() !== "");
+  
+    const sortedArray = sortByBananas(filteredData);
+    const alphabeticalOrder = sortAlphabetically(filteredData);
+    const lowestRanked = sortByBananasAndName(filteredData);
+  
+    const options: Options = {
+      'sortedArray': sortedArray,
+      'alphabeticalOrder': alphabeticalOrder,
+      'lowestRanked': lowestRanked
+    };
+  
+    return options[type].map((user: UserType, index: number) => {
+      return [user.name, sortedArray.indexOf(user) + 1, user.bananas];
+    });
+};
+
+const addToLast = (searchName: string, data: DataSet, sortedArray: UserType[], topTen: TableData[]): TableData[] => {
 
     if (findName(searchName, data).length && findName(searchName, data)[0].name !== "") {
         const foundData: TableData = [findName(searchName, data)[0].name, sortedArray.indexOf(findName(searchName, data)[0]) + 1, findName(searchName, data)[0].bananas];
@@ -19,7 +62,16 @@ export const tableData = (data: DataSet, searchName: string): TableData[] => {
             topTen.pop();
             topTen.push(foundData);
         };
-    }
+    };
 
     return topTen;
 }
+
+export const topTenData = (data: DataSet, searchName: string): TableData[] => {
+    const sortedArray = Object.values(data).sort((a: UserType, b: UserType) => b.bananas - a.bananas);
+
+    const topTen = findTopTen(sortedArray);
+    
+    return addToLast(searchName, data, sortedArray, topTen);
+}
+
