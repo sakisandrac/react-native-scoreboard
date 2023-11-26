@@ -1,5 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
-import { Image, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { Image, KeyboardAvoidingView, StyleSheet, Text, TextInput, TouchableOpacity, View, Platform } from 'react-native';
 import { data } from '../data/data';
 import { useEffect, useState } from 'react';
 import ScoreCard from './ScoreCard';
@@ -32,29 +32,34 @@ export default function Home() {
     };
 
     return (
-        <View style={styles.container}>
-            {<Image
-                source={banana}
-                style={styles.img}
-            />}
-            <Text style={styles.title}>The Banana Scoreboard</Text>
-            <Text style={styles.text}>Enter a name to search the scoreboard</Text>
-            <View style={styles.inputContainer}>
-                <TextInput
-                    style={styles.textInput}
-                    onChangeText={(text) => dispatch(setInputText(text))}
-                    value={inputText}
-                />
-                <TouchableOpacity
-                    style={styles.button}
-                    onPress={handlePress}
-                >
-                    <Text style={styles.buttonText}>Search</Text>
-                </TouchableOpacity>
-                <StatusBar style="auto" />
+        <KeyboardAvoidingView
+            behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+            style={styles.container}
+        >
+            <View style={styles.container}>
+                {<Image
+                    source={banana}
+                    style={styles.img}
+                />}
+                <Text style={styles.title}>The Banana Scoreboard</Text>
+                <Text style={styles.text}>Enter a name to search the scoreboard</Text>
+                <View style={styles.inputContainer}>
+                    <TextInput
+                        style={styles.textInput}
+                        onChangeText={(text) => dispatch(setInputText(text))}
+                        value={inputText}
+                    />
+                    <TouchableOpacity
+                        style={styles.button}
+                        onPress={handlePress}
+                    >
+                        <Text style={styles.buttonText}>Search</Text>
+                    </TouchableOpacity>
+                    <StatusBar style="auto" />
+                </View>
+                {searchName.length > 0 && <ScoreCard key={1} data={data} searchName={searchName} />}
             </View>
-            {searchName.length > 0 && <ScoreCard key={1} data={data} searchName={searchName} />}
-        </View>
+        </KeyboardAvoidingView>
     )
 }
 
@@ -74,7 +79,7 @@ const styles = StyleSheet.create({
     title: {
         fontSize: 27,
         marginBottom: 15,
-          fontFamily: 'vina-sans-regular'
+        fontFamily: 'vina-sans-regular'
     },
     inputContainer: {
         width: 400,
