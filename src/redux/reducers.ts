@@ -1,7 +1,7 @@
 import { TableData } from 'types';
 import { ActionTypes, SET_INPUT_TEXT, SET_SEARCH_NAME, SET_DATA_ARRAY, SET_ERROR } from './actions';
 
-interface StateType {
+export interface StateType {
   inputText: string;
   searchName: string;
   dataArray: TableData[]; // Assuming TableData type is defined somewhere
