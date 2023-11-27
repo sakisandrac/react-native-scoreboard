@@ -1,11 +1,12 @@
 import { TableData } from 'types';
-import { ActionTypes, SET_INPUT_TEXT, SET_SEARCH_NAME, SET_DATA_ARRAY, SET_ERROR } from './actions';
+import { ActionTypes, SET_INPUT_TEXT, SET_SEARCH_NAME, SET_DATA_ARRAY, SET_ERROR, SET_FUZZY_SEARCH } from './actions';
 
 export interface StateType {
   inputText: string;
   searchName: string;
   dataArray: TableData[];
   error: boolean;
+  fuzzySearch: string[]
 }
 
 const initialState: StateType = {
@@ -13,6 +14,7 @@ const initialState: StateType = {
   searchName: '',
   dataArray: [],
   error: false,
+  fuzzySearch: []
 };
 
 const userReducer = (state = initialState, action: ActionTypes): StateType => {
@@ -25,6 +27,8 @@ const userReducer = (state = initialState, action: ActionTypes): StateType => {
       return { ...state, dataArray: action.payload };
     case SET_ERROR:
       return { ...state, error: action.payload };
+      case SET_FUZZY_SEARCH:
+        return { ...state, fuzzySearch: action.payload };
     default:
       return state;
   }

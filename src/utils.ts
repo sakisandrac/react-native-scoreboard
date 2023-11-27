@@ -79,3 +79,10 @@ export const topTenData = (data: DataSet, searchName: string): TableData[] => {
     return addToLast(searchName, data, sortedArray, topTen);
 }
 
+export const searchNames = (data: DataSet, searchText: string): string[] => {
+    const names: string[] = Object.values(data)
+      .filter((user) => user.name.toLowerCase().includes(searchText.toLowerCase()))
+      .map((user) => user.name);
+  
+    return names;
+};

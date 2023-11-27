@@ -1,11 +1,9 @@
-import { View, Text, StyleSheet, FlatList, Image, Button, TouchableOpacity, ScrollView } from 'react-native';
-// import { Picker } from '@react-native-picker/picker'
-import Picker from 'react-native-picker';
+import { View, Text, StyleSheet, FlatList, Image, TouchableOpacity, ScrollView } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import { DataSet, TableData } from '../types';
-import { findName, sortData, topTenData } from '../utils';
+import { findName, searchNames, sortData, topTenData } from '../utils';
 import { useSelector, useDispatch } from 'react-redux';
-import { setDataArray, setError } from '../redux/actions';
+import { setDataArray, setError, setFuzzySearch, setSearchName } from '../redux/actions';
 import monkey from '../../assets/monkey.png';
 
 interface ScoreCardProps {
@@ -17,24 +15,53 @@ export default function ScoreCard({ data, searchName }: ScoreCardProps) {
 
   const tableHeads: string[] = ['Name', 'Rank', 'Bananas'];
   const dispatch = useDispatch();
-  const dataArray = useSelector((state: any) => state.userReducer.dataArray);
-  const error = useSelector((state: any) => state.userReducer.error);
-  
+  const { error, dataArray, fuzzySearch } = useSelector((state: any) => state.userReducer);
+
   const handlePress = (type: string) => {
     dispatch(setDataArray(sortData(data, type)))
   }
   
   useEffect(() => {
+  
     if (!findName(searchName, data).length) {
-      dispatch(setError(true));
+      if(searchNames(data, searchName).length) {
+        dispatch(setFuzzySearch(searchNames(data, searchName)))
+      } else {
+        dispatch(setError(true));
+        dispatch(setFuzzySearch([]));
+      }
     } else {
       dispatch(setDataArray(topTenData(data, searchName)));
     }
 
     return () => {
-      dispatch(setError(false))
+      dispatch(setError(false));
+      dispatch(setFuzzySearch([]));
     };
   }, [searchName, data, dispatch]);
+
+  const renderFoundNames = () => {
+    return (
+      <View style={styles.names}>
+        <Text>Could not find {searchName}, did you mean one of these? </Text>
+        <FlatList
+              data={fuzzySearch}
+              renderItem={({ item }) => renderNames(item)}
+              keyExtractor={(item, index) => index.toString()}
+            />
+      </View>
+    )
+  }
+
+  const renderNames = (name: string) => {
+   return (
+   <TouchableOpacity 
+    style={styles.button}
+    onPress={() => {dispatch(setSearchName(name))}}>
+      <Text>{name}</Text>
+    </TouchableOpacity>
+   )
+  }
 
   const renderTableHeader = () => {
     return (
@@ -75,6 +102,7 @@ export default function ScoreCard({ data, searchName }: ScoreCardProps) {
           <Text style={styles.errorMsg}>User not found, please search a different name</Text>
           <Image source={monkey} style={styles.img} />
         </View> :
+        fuzzySearch.length ? renderFoundNames() : 
         <View style={styles.main}>
           <ScrollView horizontal={true} style={styles.filter}>
             <TouchableOpacity
@@ -138,6 +166,9 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     fontSize: 12
+  },
+  names : {
+    alignItems: 'center'
   },
   table: {
     flex: 10

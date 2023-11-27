@@ -1,4 +1,4 @@
-import { findName, sortArray, findTopTen, sortByBananas, sortAlphabetically, sortData, topTenData, addToLast } from "../utils";
+import { findName, sortArray, findTopTen, sortByBananas, sortAlphabetically, sortData, topTenData, addToLast, searchNames } from "../utils";
 import { testData } from './testData';
 
 describe('Utils Functions', () => {
@@ -108,6 +108,16 @@ describe('Utils Functions', () => {
             expect(addToLast(searchName, testData, sortedArray, topTen)[9][0]).toEqual(searchName);
             expect(addToLast(searchName, testData, sortedArray, topTen).length).toEqual(10);
         });
-
     });
+
+    describe('searchNames', () => {
+        it('should return an array of names matching the entered text', () => {
+            const searchedText = 'bo';
+            const searchedText2 = 'BO';
+            const expectedResult = ['Bob Burgers', 'Bo'];
+
+            expect(searchNames(testData, searchedText)).toEqual(expectedResult);
+            expect(searchNames(testData, searchedText2)).toEqual(expectedResult);
+        });
+    })
 })
