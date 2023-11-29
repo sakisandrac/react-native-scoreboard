@@ -36,7 +36,7 @@ Technologies used:<br>
  </div>
 
 ## Installation Instructions:
-- Fork [this](https://github.com/lauraguerra1/celestial-cycle) repository. 
+- Fork [this](https://github.com/sakisandrac/react-native-scoreboard) repository. 
 - Clone it to your local machine using the command: `git clone git@github.com:sakisandrac/react-native-scoreboard.git`.
 - Run the command: `cd react-native-scoreboard`
 - Run the command: `npm install`
