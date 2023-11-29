@@ -13,7 +13,7 @@ import React from 'react';
 export default function Home() {
 
     const [fontsLoaded, setFontsLoaded] = useState(false);
-    const { searchName, inputText } = useSelector((state: any) => state.userReducer)
+    const { searchName, inputText } = useSelector((state: any) => state.userReducer);
     const dispatch = useDispatch();
 
     const loadFonts = async () => {

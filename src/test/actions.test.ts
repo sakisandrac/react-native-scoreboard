@@ -1,5 +1,5 @@
 import { TableData } from 'types';
-import { setInputText, setSearchName, setDataArray, setError, SET_INPUT_TEXT, SET_SEARCH_NAME, SET_DATA_ARRAY, SET_ERROR } from '../redux/actions';
+import { setInputText, setSearchName, setDataArray, setError, SET_INPUT_TEXT, SET_SEARCH_NAME, SET_DATA_ARRAY, SET_ERROR, SET_FUZZY_SEARCH, setFuzzySearch } from '../redux/actions';
 
 describe('Action Creators', () => {
   it('should create an action to set input text', () => {
@@ -36,6 +36,15 @@ describe('Action Creators', () => {
       payload: err,
     };
     expect(setError(err)).toEqual(expectedAction);
+  });
+
+  it('should create an action to set fuzzy search array', () => {
+    const array: string[] = ['Bo', 'Bob Burger'];
+    const expectedAction = {
+      type: SET_FUZZY_SEARCH,
+      payload: array,
+    };
+    expect(setFuzzySearch(array)).toEqual(expectedAction);
   });
 
 });
