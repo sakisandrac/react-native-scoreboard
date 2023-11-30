@@ -5,7 +5,7 @@ export type UserType = {
     "name": string,
     "stars": number,
     "subscribed": boolean,
-    "uid": string
+    "uid"?: string
 }
 
 export type DataSet = {
