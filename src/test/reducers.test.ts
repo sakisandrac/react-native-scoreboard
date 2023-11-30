@@ -9,6 +9,9 @@ describe('Reducers', () => {
     searchName: '',
     dataArray: [],
     error: false,
+    fuzzySearch: [],
+    allData: {},
+    networkError: false
   };
 
   it('should handle SET_INPUT_TEXT action', () => {

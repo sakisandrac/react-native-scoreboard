@@ -9,7 +9,7 @@ export type UserType = {
 }
 
 export type DataSet = {
-    [key: string] : UserType
+    [key: string] : UserType | UserType2
 }
 
 export type TableData = [string, number, number];
@@ -18,7 +18,7 @@ export type Options = {
     [key: string]: UserType[];
 }
 
-export type UserTypeDB = {
+export type UserTypeToDB = {
     "bananas": number,
     "lastDayPlayed": string,
     "longestStreak": number,

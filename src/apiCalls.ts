@@ -1,6 +1,6 @@
-import { UserTypeDB } from "types";
+import { UserTypeToDB } from "types";
 
-export const postNewUser = async (addNewUser: UserTypeDB) => {
+export const postNewUser = async (addNewUser: UserTypeToDB) => {
     const response = await fetch('http://localhost:3003/api/v1/user', {
         method: 'POST',
         headers: {

@@ -1,10 +1,12 @@
-import { TableData } from "types";
+import { DataSet, TableData } from "types";
 
 export const SET_INPUT_TEXT = 'SET_INPUT_TEXT';
 export const SET_SEARCH_NAME = 'SET_SEARCH_NAME';
 export const SET_DATA_ARRAY = 'SET_DATA_ARRAY';
 export const SET_ERROR = 'SET_ERROR';
 export const SET_FUZZY_SEARCH = 'SET_FUZZY_SEARCH';
+export const SET_NETWORK_ERROR = 'SET_NETWORK_ERROR';
+export const SET_ALL_DATA = 'SET_ALL_DATA';
 
 interface SetInputTextAction {
   type: typeof SET_INPUT_TEXT;
@@ -31,7 +33,17 @@ interface SetFuzzySearchAction {
   payload: string[];
 }
 
-export type ActionTypes = SetInputTextAction | SetSearchNameAction | SetDataArrayAction | SetErrorAction | SetFuzzySearchAction;
+interface SetNetworkErrorAction {
+  type: typeof SET_NETWORK_ERROR;
+  payload: boolean;
+}
+
+interface SetAllDataAction {
+  type: typeof SET_ALL_DATA;
+  payload: DataSet;
+}
+
+export type ActionTypes = SetAllDataAction | SetNetworkErrorAction | SetInputTextAction | SetSearchNameAction | SetDataArrayAction | SetErrorAction | SetFuzzySearchAction;
 
 export const setInputText = (text: string): SetInputTextAction => ({
   type: SET_INPUT_TEXT,
@@ -56,4 +68,14 @@ export const setError = (error: boolean): SetErrorAction => ({
 export const setFuzzySearch = (name: string[]): SetFuzzySearchAction => ({
   type: SET_FUZZY_SEARCH,
   payload: name,
+});
+
+export const setNetworkError = (error: boolean): SetNetworkErrorAction => ({
+  type: SET_NETWORK_ERROR,
+  payload: error,
+});
+
+export const setAllData = (allData: DataSet): SetAllDataAction => ({
+  type: SET_ALL_DATA,
+  payload: allData,
 });

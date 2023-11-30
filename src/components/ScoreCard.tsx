@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { DataSet, TableData, UserType, UserType2 } from '../types';
 import { createDataObject, findName, searchNames, sortData, topTenData } from '../utils';
 import { useSelector, useDispatch } from 'react-redux';
-import { setDataArray, setError, setFuzzySearch, setSearchName } from '../redux/actions';
+import { setDataArray, setError, setFuzzySearch, setSearchName, setNetworkError, setAllData } from '../redux/actions';
 import monkey from '../../assets/monkey.png';
 import { getUsers } from '../apiCalls';
 import { data } from '../data/data';
@@ -16,9 +16,9 @@ export default function ScoreCard({ searchName }: ScoreCardProps) {
 
   const tableHeads: string[] = ['Name', 'Rank', 'Bananas'];
   const dispatch = useDispatch();
-  const { error, dataArray, fuzzySearch } = useSelector((state: any) => state.userReducer);
-  const [networkError, setNetworkError] = useState(false);
-  const [allData, setAllData] = useState({})
+  const { error, dataArray, fuzzySearch, allData, networkError } = useSelector((state: any) => state.userReducer);
+  // const [networkError, setNetworkError] = useState(false);
+  // const [allData, setAllData] = useState({})
 
   const handlePress = (type: string) => {
     dispatch(setDataArray(sortData(allData, type)))
@@ -26,7 +26,7 @@ export default function ScoreCard({ searchName }: ScoreCardProps) {
 
   const handleData = (reqdata: UserType2[]) => {
     const newData = createDataObject(reqdata);
-    setAllData(newData);
+    dispatch(setAllData(newData));
     dispatch(setDataArray(topTenData(newData, searchName)));
     return newData;
   };
@@ -52,7 +52,7 @@ export default function ScoreCard({ searchName }: ScoreCardProps) {
     })
     .catch(err => {
       setNetworkError(true);
-      setAllData(data);
+      dispatch(setAllData(data));
       handleSearch(data);
       console.error(err);
     });
@@ -60,7 +60,7 @@ export default function ScoreCard({ searchName }: ScoreCardProps) {
     return () => {
       dispatch(setError(false));
       dispatch(setFuzzySearch([]));
-      setNetworkError(false);
+      dispatch(setNetworkError(false));
     };
   }, [searchName, dispatch]);
 
