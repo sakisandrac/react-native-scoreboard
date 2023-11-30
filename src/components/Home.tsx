@@ -9,12 +9,14 @@ import VinaSansRegular from '../../assets/fonts/VinaSans-Regular.ttf';
 import { useSelector, useDispatch } from 'react-redux';
 import { setInputText, setSearchName } from '../redux/actions';
 import React from 'react';
+import { useNavigation } from '@react-navigation/native';
 
 export default function Home() {
 
     const [fontsLoaded, setFontsLoaded] = useState(false);
-    const { searchName, inputText } = useSelector((state: any) => state.userReducer);
+    const { searchName, inputText } = useSelector((state: any) => state.userReducer)
     const dispatch = useDispatch();
+    const navigation = useNavigation();
 
     const loadFonts = async () => {
         await Font.loadAsync({
@@ -31,6 +33,10 @@ export default function Home() {
         dispatch(setSearchName(inputText));
     };
 
+    const navigateToAddUser = () => {
+        navigation.navigate('AddUser' as never);
+    };
+
     return (
         <KeyboardAvoidingView
             behavior={Platform.OS === 'ios' ? 'padding' : undefined}
@@ -42,10 +48,10 @@ export default function Home() {
                     style={styles.img}
                 />}
                 <Text style={{
-                    fontFamily: fontsLoaded ? 'vina-sans-regular' : 'sans-serif', 
+                    fontFamily: fontsLoaded ? 'vina-sans-regular' : '',
                     fontSize: 24,
                     marginBottom: 10
-                    }}>The Banana Scoreboard</Text>
+                }}>The Banana Scoreboard</Text>
                 <Text style={styles.text}>Enter a name to search the scoreboard</Text>
                 <View style={styles.inputContainer}>
                     <TextInput
@@ -61,6 +67,12 @@ export default function Home() {
                     </TouchableOpacity>
                     <StatusBar style="auto" />
                 </View>
+                <TouchableOpacity
+                    style={styles.button}
+                    onPress={navigateToAddUser}
+                >
+                    <Text style={styles.buttonText}>Add User</Text>
+                </TouchableOpacity>
                 {searchName.length > 0 && <ScoreCard key={1} data={data} searchName={searchName} />}
             </View>
         </KeyboardAvoidingView>
@@ -73,8 +85,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#FFFFE9',
         alignItems: 'center',
         justifyContent: 'center',
-        flexDirection: 'column',
-        marginTop: 20,
+        flexDirection: 'column'
     },
     img: {
         height: 100,
@@ -103,13 +114,14 @@ const styles = StyleSheet.create({
     button: {
         borderColor: '#000000',
         height: 40,
-        width: 70,
+        width: 100,
         borderWidth: .5,
         backgroundColor: '#fff',
         alignItems: 'center',
         justifyContent: 'center',
         borderRadius: 20,
         margin: 10,
+        padding: 10
     },
     buttonText: {
         color: 'black'
