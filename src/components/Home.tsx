@@ -10,6 +10,8 @@ import { useSelector, useDispatch } from 'react-redux';
 import { setInputText, setSearchName } from '../redux/actions';
 import React from 'react';
 import { useNavigation } from '@react-navigation/native';
+import { getUsers } from '../apiCalls';
+import { createDataObject } from '../utils';
 
 export default function Home() {
 
@@ -29,6 +31,17 @@ export default function Home() {
         loadFonts();
     }, []);
 
+    // useEffect(() => {
+    //     getUsers().then(reqdata => {
+    //         createDataObject(reqdata)
+    //         // dispatch(setDataArray(topTenData(createDataObject(reqdata), searchName)));
+    //         console.log('here')
+    //       })
+    //       .catch(err => {
+    //         console.log(err)
+    //       })
+    // },[])
+
     const handlePress = () => {
         dispatch(setSearchName(inputText));
     };
@@ -43,15 +56,18 @@ export default function Home() {
             style={styles.container}
         >
             <View style={styles.container}>
-                {<Image
+                {!searchName.length && 
+                <View style={{alignItems: 'center'}}>
+                    <Image
                     source={banana}
                     style={styles.img}
-                />}
+                    />
                 <Text style={{
                     fontFamily: fontsLoaded ? 'vina-sans-regular' : '',
                     fontSize: 24,
                     marginBottom: 10
                 }}>The Banana Scoreboard</Text>
+                </View>}
                 <Text style={styles.text}>Enter a name to search the scoreboard</Text>
                 <View style={styles.inputContainer}>
                     <TextInput
@@ -73,7 +89,7 @@ export default function Home() {
                 >
                     <Text style={styles.buttonText}>Add User</Text>
                 </TouchableOpacity>
-                {searchName.length > 0 && <ScoreCard key={1} data={data} searchName={searchName} />}
+                {searchName.length > 0 && <ScoreCard key={1} searchName={searchName} />}
             </View>
         </KeyboardAvoidingView>
     )
