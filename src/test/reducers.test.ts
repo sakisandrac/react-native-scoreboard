@@ -1,7 +1,8 @@
 import userReducer from '../redux/reducers';
 import { StateType } from '../redux/reducers';
-import { setInputText, setSearchName, setDataArray, setError } from '../redux/actions';
+import { setInputText, setSearchName, setDataArray, setError, setNetworkError, setFuzzySearch, setAllData } from '../redux/actions';
 import { TableData } from 'types';
+import { testData } from './testData';
 
 describe('Reducers', () => {
   const initialState: StateType = {
@@ -40,6 +41,26 @@ describe('Reducers', () => {
     const action = setError(err);
     const newState = userReducer(initialState, action);
     expect(newState.error).toEqual(err);
+  });
+
+  it('should handle SET_FUZZY_SEARCH action', () => {
+    const array: string[] = ['Bo', 'Bob Burger'];
+    const action = setFuzzySearch(array);
+    const newState = userReducer(initialState, action);
+    expect(newState.fuzzySearch).toEqual(array);
+  });
+
+  it('should handle SET_NETWORK_ERROR action', () => {
+    const err: boolean = false;
+    const action = setNetworkError(err);
+    const newState = userReducer(initialState, action);
+    expect(newState.error).toEqual(err);
+  });
+
+  it('should handle SET_ALL_DATA action', () => {
+    const action = setAllData(testData);
+    const newState = userReducer(initialState, action);
+    expect(newState.allData).toEqual(testData);
   });
 
 });
