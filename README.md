@@ -67,3 +67,10 @@ Technologies used FRONTEND:<br>
 - Run the command: `npm install`
 - Run the command: `npm run ios`
 - To run tests, run the command: `npm test`
+> - To connect the backend: (optional as the FE can run without it)
+> - Fork [the backend](https://github.com/sakisandrac/react-native-scoreboard-api/) repository.
+> - Clone it to your local machine using the command: `git clone git@github.com:sakisandrac/react-native-scoreboard-api.git`.
+> - Run the command: `cd react-native-scoreboard-api`
+> - Run the command: `npm install`
+> - Run the command: `npm start`
+> - NOTE: the database will not connect until the MongoDB connection string password is added, please contact me for this password.
