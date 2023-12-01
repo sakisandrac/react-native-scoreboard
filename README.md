@@ -37,6 +37,8 @@ Technologies used FRONTEND:<br>
 
 # Preview of App:
  <div align='center'> 
+ 
+https://github.com/sakisandrac/react-native-scoreboard/assets/118419729/0eb10898-817c-4b28-a529-232d53dd1c00
     
   <h2>Home Page, Scoreboard and Search Page</h2>
   <div style="display: inline-block;">
