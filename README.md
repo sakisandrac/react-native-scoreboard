@@ -20,6 +20,9 @@ Technologies used FRONTEND:<br>
 ## About this Application:
 - Banana Scoreboard allows users to search through a scoreboard, by user's name and sees where the user searched ranks amongst the top ten highest banana scores.
 ### Application Features:
+- Search for a user by name:
+  - if user is in top 10 the name will be highlighted in ranking position.
+  - if user is not in top 10, the name will appear highlighted the bottom.
 - Sorting by seeing all the rankings for all users, alphabetically and by lowest ranked
 - Fuzzy Search: If user types in a name of a partial match, the application will offer suggestions that match the closest in the data.
 - If backend api is open locally, retrieve the latest data from the database, otherwise, data is taken from original dataset.
@@ -38,7 +41,7 @@ Technologies used FRONTEND:<br>
   <h2>Home Page, Scoreboard and Search Page</h2>
   <div style="display: inline-block;">
   <img width="290" alt="Screenshot 2023-11-27 at 7 01 26 PM" src="https://github.com/sakisandrac/react-native-scoreboard/assets/118419729/257f97db-86c9-4efb-b0ee-e27a3adb0fcb" alt="Image 1" style="display: inline-block;">
-  <img width="290" alt="Screenshot 2023-11-26 at 3 22 10 PM" src="https://github.com/sakisandrac/react-native-scoreboard/assets/118419729/d2b61666-ee7d-47c6-a1ce-f7eb239d00f9" style="display: inline-block;">
+  <img width="310" alt="Screenshot 2023-11-26 at 3 22 10 PM" src="https://github.com/sakisandrac/react-native-scoreboard/assets/118419729/f85c8234-c69f-4776-b777-b3dfb2a24883" style="display: inline-block;">
 </div>
 
   <h2>User Not Found and Partial User Match </h2>
