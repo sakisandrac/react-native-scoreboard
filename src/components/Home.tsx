@@ -1,6 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
 import { Image, KeyboardAvoidingView, StyleSheet, Text, TextInput, TouchableOpacity, View, Platform } from 'react-native';
-import { data } from '../data/data';
 import { useEffect, useState } from 'react';
 import ScoreCard from './ScoreCard';
 import banana from '../../assets/love.png';
@@ -10,13 +9,11 @@ import { useSelector, useDispatch } from 'react-redux';
 import { setInputText, setSearchName } from '../redux/actions';
 import React from 'react';
 import { useNavigation } from '@react-navigation/native';
-import { getUsers } from '../apiCalls';
-import { createDataObject } from '../utils';
 
 export default function Home() {
 
     const [fontsLoaded, setFontsLoaded] = useState(false);
-    const { searchName, inputText } = useSelector((state: any) => state.userReducer)
+    const { searchName, inputText } = useSelector((state: any) => state.userReducer);
     const dispatch = useDispatch();
     const navigation = useNavigation();
 
@@ -30,17 +27,6 @@ export default function Home() {
     useEffect(() => {
         loadFonts();
     }, []);
-
-    // useEffect(() => {
-    //     getUsers().then(reqdata => {
-    //         createDataObject(reqdata)
-    //         // dispatch(setDataArray(topTenData(createDataObject(reqdata), searchName)));
-    //         console.log('here')
-    //       })
-    //       .catch(err => {
-    //         console.log(err)
-    //       })
-    // },[])
 
     const handlePress = () => {
         dispatch(setSearchName(inputText));
@@ -89,7 +75,7 @@ export default function Home() {
                 >
                     <Text style={styles.buttonText}>Add User</Text>
                 </TouchableOpacity>
-                {searchName.length > 0 && <ScoreCard key={1} searchName={searchName} />}
+                {searchName.length > 0 && <ScoreCard key={1} />}
             </View>
         </KeyboardAvoidingView>
     )

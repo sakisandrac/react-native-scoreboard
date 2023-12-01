@@ -13,7 +13,7 @@ export const postNewUser = async (addNewUser: UserTypeToDB) => {
         let data = await response.json();
         return data
     } else {
-        console.error('Failed to add user');
+        throw new Error('Network request failure');
     }
 }
 
@@ -30,6 +30,6 @@ export const getUsers = async () => {
         return data;
     } catch (error) {
         console.error('Error fetching users:', error);
-        throw error;
+        throw new Error('Network failure');
     }
 }

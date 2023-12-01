@@ -1,8 +1,13 @@
 import { View, Text, StyleSheet, TextInput, TouchableOpacity, Alert } from 'react-native'
 import React, { useState } from 'react';
 import { postNewUser } from '../apiCalls';
+import { useSelector } from 'react-redux';
+import { setNetworkError } from '../redux/actions';
 
 export default function AddUser() {
+
+  const { networkError } = useSelector((state: any) => state.userReducer);
+  const [formError, setFormError] = useState<boolean>(false);
 
   const [form, setForm] = useState({
     bananas: "",
@@ -19,10 +24,10 @@ export default function AddUser() {
     });
   };
 
-  const showAlert = () => {
+  const showAlert = (error: boolean) => {
     Alert.alert(
       'Message:',
-      'User Added Successfully!',
+      `${error ? 'Cannot connect to network, try again later' : 'User Added Successfully!'}`,
       [
         {
           text: 'OK',
@@ -33,30 +38,47 @@ export default function AddUser() {
     );
   };
 
-  const handlePress = async () => {
-    const addNewUser = {
-      bananas: parseInt(form.bananas),
-      lastDayPlayed: form.lastDayPlayed,
-      longestStreak: parseInt(form.longestStreak),
-      name: form.name,
-      stars: parseInt(form.stars),
-      subscribed: JSON.parse(form.subscribed.toLowerCase()),
-    };
-
-    try {
-      const data = await postNewUser(addNewUser);
-      showAlert();
-      setForm({
-        bananas: "",
-        lastDayPlayed: "",
-        longestStreak: "",
-        name: "",
-        stars: "",
-        subscribed: "",
-      });
-    } catch (err) {
-      console.error(err);
+  const checkForm = () => {
+    if (form.bananas || form.lastDayPlayed || form.longestStreak || form.name || form.stars || form.subscribed) {
+      return true;
     }
+  }
+
+  const handlePress = async () => {
+   
+    if(!checkForm()) {
+      console.log('he')
+      setFormError(false); 
+
+      const addNewUser = {
+        bananas: parseInt(form.bananas),
+        lastDayPlayed: form.lastDayPlayed,
+        longestStreak: parseInt(form.longestStreak),
+        name: form.name,
+        stars: parseInt(form.stars),
+        subscribed: JSON.parse(form.subscribed.toLowerCase()),
+      };
+  
+      try {
+        const data = await postNewUser(addNewUser);
+        showAlert(false);
+        setForm({
+          bananas: "",
+          lastDayPlayed: "",
+          longestStreak: "",
+          name: "",
+          stars: "",
+          subscribed: "",
+        });
+      } catch (err) {
+        console.log('EROOR')
+        showAlert(true);
+        console.error(err);
+      }
+    } else {
+      setFormError(true);
+      console.log('here?')
+    };
   };
 
   return (
@@ -116,9 +138,9 @@ export default function AddUser() {
         style={styles.button}
         onPress={handlePress}
       >
-
         <Text style={{}}>Submit</Text>
       </TouchableOpacity>
+     {formError && <Text>Please Fill Out All Fields!</Text>}
     </View>
   )
 }

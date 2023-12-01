@@ -89,7 +89,7 @@ export const searchNames = (data: DataSet, searchText: string): string[] => {
 
 export const createDataObject = (array: UserType2[]) => {
 
-    return array.reduce((transformedObject: Record<string, any>, item: UserType2) => {
+    return array.reduce((transformedObject: Record<string, UserType>, item: UserType2) => {
 
         transformedObject[item._id] = {
             bananas: item.bananas,
@@ -102,5 +102,5 @@ export const createDataObject = (array: UserType2[]) => {
         };
 
         return transformedObject;
-    }, {})
-}
+    }, {});
+};

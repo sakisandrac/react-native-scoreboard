@@ -109,3 +109,35 @@ export const testData =
     "uid" : "11"
   }
 }
+export const testMongoData = {
+  "10" : {
+    "bananas" : 60,
+    "lastDayPlayed" : "2017-11-01",
+    "longestStreak" : 0,
+    "name" : "Bob Burgers",
+    "stars" : 5,
+    "subscribed" : false,
+    "uid" : "10",
+    "_id": "1212"
+  },
+  "12" : {
+    "bananas" : 80,
+    "lastDayPlayed" : "2019-01-24",
+    "longestStreak" : 1,
+    "name" : "Bo",
+    "stars" : 5,
+    "subscribed" : false,
+    "uid" : "12",
+    "_id": "1234"
+  },
+  "11" : {
+    "bananas" : 90,
+    "lastDayPlayed" : "2019-01-24",
+    "longestStreak" : 1,
+    "name" : "",
+    "stars" : 5,
+    "subscribed" : false,
+    "uid" : "11",
+    "_id": "1233"
+  }
+}

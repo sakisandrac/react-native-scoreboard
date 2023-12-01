@@ -8,17 +8,10 @@ import monkey from '../../assets/monkey.png';
 import { getUsers } from '../apiCalls';
 import { data } from '../data/data';
 
-interface ScoreCardProps {
-  searchName: string
-}
+export default function ScoreCard() {
 
-export default function ScoreCard({ searchName }: ScoreCardProps) {
-
-  const tableHeads: string[] = ['Name', 'Rank', 'Bananas'];
   const dispatch = useDispatch();
-  const { error, dataArray, fuzzySearch, allData, networkError } = useSelector((state: any) => state.userReducer);
-  // const [networkError, setNetworkError] = useState(false);
-  // const [allData, setAllData] = useState({})
+  const { error, dataArray, fuzzySearch, allData, networkError, searchName } = useSelector((state: any) => state.userReducer);
 
   const handlePress = (type: string) => {
     dispatch(setDataArray(sortData(allData, type)))
@@ -51,7 +44,7 @@ export default function ScoreCard({ searchName }: ScoreCardProps) {
       handleSearch(newData);
     })
     .catch(err => {
-      setNetworkError(true);
+      dispatch(setNetworkError(true));
       dispatch(setAllData(data));
       handleSearch(data);
       console.error(err);
@@ -88,6 +81,8 @@ export default function ScoreCard({ searchName }: ScoreCardProps) {
   }
 
   const renderTableHeader = () => {
+    const tableHeads: string[] = ['Name', 'Rank', 'Bananas'];
+
     return (
       <View style={styles.tableRow}>
         {tableHeads.map((head, index) => (
