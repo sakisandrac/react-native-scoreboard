@@ -1,4 +1,4 @@
-import { DataSet, Options, TableData, UserType } from "./types";
+import { DataSet, Options, TableData, UserType, UserType2 } from "./types";
 
 export const findName = (searchName: string, data: DataSet) => {
     return Object.values(data).filter(user => user.name.toLowerCase() === searchName.toLowerCase());
@@ -81,8 +81,26 @@ export const topTenData = (data: DataSet, searchName: string): TableData[] => {
 
 export const searchNames = (data: DataSet, searchText: string): string[] => {
     const names: string[] = Object.values(data)
-      .filter((user) => user.name.toLowerCase().includes(searchText.toLowerCase()))
-      .map((user) => user.name);
-  
+        .filter((user) => user.name.toLowerCase().includes(searchText.toLowerCase()))
+        .map((user) => user.name);
+
     return names;
+};
+
+export const createDataObject = (array: UserType2[]) => {
+
+    return array.reduce((transformedObject: Record<string, UserType>, item: UserType2) => {
+
+        transformedObject[item._id] = {
+            bananas: item.bananas,
+            lastDayPlayed: item.lastDayPlayed,
+            longestStreak: item.longestStreak,
+            name: item.name,
+            stars: item.stars,
+            subscribed: item.subscribed,
+            uid: item.uid
+        };
+
+        return transformedObject;
+    }, {});
 };

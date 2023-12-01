@@ -1,5 +1,5 @@
-import { findName, sortArray, findTopTen, sortByBananas, sortAlphabetically, sortData, topTenData, addToLast, searchNames } from "../utils";
-import { testData } from './testData';
+import { findName, sortArray, findTopTen, sortByBananas, sortAlphabetically, sortData, topTenData, addToLast, searchNames, createDataObject } from "../utils";
+import { testData, testMongoData } from './testData';
 
 describe('Utils Functions', () => {
 
@@ -119,5 +119,40 @@ describe('Utils Functions', () => {
             expect(searchNames(testData, searchedText)).toEqual(expectedResult);
             expect(searchNames(testData, searchedText2)).toEqual(expectedResult);
         });
+    });
+
+    describe('createDataObject', () => {
+        it('should return an object of user data from an array', () => {
+            const expectedResult = {
+                '1212': {
+                  bananas: 60,
+                  lastDayPlayed: '2017-11-01',
+                  longestStreak: 0,
+                  name: 'Bob Burgers',
+                  stars: 5,
+                  subscribed: false,
+                  uid: '10'
+                },
+                '1233': {
+                  bananas: 90,
+                  lastDayPlayed: '2019-01-24',
+                  longestStreak: 1,
+                  name: '',
+                  stars: 5,
+                  subscribed: false,
+                  uid: '11'
+                },
+                '1234': {
+                  bananas: 80,
+                  lastDayPlayed: '2019-01-24',
+                  longestStreak: 1,
+                  name: 'Bo',
+                  stars: 5,
+                  subscribed: false,
+                  uid: '12'
+                }
+              }
+            expect(createDataObject(testMongoData)).toEqual(expectedResult);
+        })
     })
 })

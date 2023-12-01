@@ -1,44 +1,61 @@
 import { View, Text, StyleSheet, FlatList, Image, TouchableOpacity, ScrollView } from 'react-native';
 import React, { useEffect, useState } from 'react';
-import { DataSet, TableData } from '../types';
-import { findName, searchNames, sortData, topTenData } from '../utils';
+import { DataSet, TableData, UserType, UserType2 } from '../types';
+import { createDataObject, findName, searchNames, sortData, topTenData } from '../utils';
 import { useSelector, useDispatch } from 'react-redux';
-import { setDataArray, setError, setFuzzySearch, setSearchName } from '../redux/actions';
+import { setDataArray, setError, setFuzzySearch, setSearchName, setNetworkError, setAllData } from '../redux/actions';
 import monkey from '../../assets/monkey.png';
+import { getUsers } from '../apiCalls';
+import { data } from '../data/data';
 
-interface ScoreCardProps {
-  data: DataSet,
-  searchName: string
-}
+export default function ScoreCard() {
 
-export default function ScoreCard({ data, searchName }: ScoreCardProps) {
-
-  const tableHeads: string[] = ['Name', 'Rank', 'Bananas'];
   const dispatch = useDispatch();
-  const { error, dataArray, fuzzySearch } = useSelector((state: any) => state.userReducer);
+  const { error, dataArray, fuzzySearch, allData, networkError, searchName } = useSelector((state: any) => state.userReducer);
 
   const handlePress = (type: string) => {
-    dispatch(setDataArray(sortData(data, type)))
+    dispatch(setDataArray(sortData(allData, type)))
   }
-  
-  useEffect(() => {
-  
-    if (!findName(searchName, data).length) {
-      if(searchNames(data, searchName).length) {
-        dispatch(setFuzzySearch(searchNames(data, searchName)))
+
+  const handleData = (reqdata: UserType2[]) => {
+    const newData = createDataObject(reqdata);
+    dispatch(setAllData(newData));
+    dispatch(setDataArray(topTenData(newData, searchName)));
+    return newData;
+  };
+
+  const handleSearch = (dataToSearch: DataSet) => {
+    if (!findName(searchName, dataToSearch).length) {
+      if (searchNames(dataToSearch, searchName).length) {
+        dispatch(setFuzzySearch(searchNames(dataToSearch, searchName)));
       } else {
         dispatch(setError(true));
         dispatch(setFuzzySearch([]));
       }
     } else {
-      dispatch(setDataArray(topTenData(data, searchName)));
+      dispatch(setDataArray(topTenData(dataToSearch, searchName)));
     }
+  };
 
+  useEffect(() => {
+    getUsers()
+    .then(reqdata => {
+      const newData = handleData(reqdata);
+      handleSearch(newData);
+    })
+    .catch(err => {
+      dispatch(setNetworkError(true));
+      dispatch(setAllData(data));
+      handleSearch(data);
+      console.error(err);
+    });
+    
     return () => {
       dispatch(setError(false));
       dispatch(setFuzzySearch([]));
+      dispatch(setNetworkError(false));
     };
-  }, [searchName, data, dispatch]);
+  }, [searchName, dispatch]);
 
   const renderFoundNames = () => {
     return (
@@ -51,7 +68,7 @@ export default function ScoreCard({ data, searchName }: ScoreCardProps) {
             />
       </View>
     )
-  }
+  };
 
   const renderNames = (name: string) => {
    return (
@@ -64,6 +81,8 @@ export default function ScoreCard({ data, searchName }: ScoreCardProps) {
   }
 
   const renderTableHeader = () => {
+    const tableHeads: string[] = ['Name', 'Rank', 'Bananas'];
+
     return (
       <View style={styles.tableRow}>
         {tableHeads.map((head, index) => (
@@ -99,11 +118,13 @@ export default function ScoreCard({ data, searchName }: ScoreCardProps) {
     <View style={styles.container}>
       {error ?
         <View style={styles.errorContainer}>
-          <Text style={styles.errorMsg}>User not found, please search a different name</Text>
+          {networkError && <Text style={styles.errorMsg}>Network not connect, data loaded not most recent</Text>}
+          <Text style={{textAlign: 'center'}}>User not found, please search a different name</Text>
           <Image source={monkey} style={styles.img} />
         </View> :
         fuzzySearch.length ? renderFoundNames() : 
         <View style={styles.main}>
+          {networkError && <Text style={styles.errorMsg}>Network not connect, data loaded not most recent</Text>}
           <ScrollView horizontal={true} style={styles.filter}>
             <TouchableOpacity
               style={styles.button}
@@ -197,7 +218,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   errorMsg: {
-    textAlign: 'center'
+    textAlign: 'center',
+    margin: 5,
+    color: 'red'
   },
   errorContainer: {
     alignItems: 'center',

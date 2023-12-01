@@ -1,5 +1,6 @@
 import { TableData } from 'types';
-import { setInputText, setSearchName, setDataArray, setError, SET_INPUT_TEXT, SET_SEARCH_NAME, SET_DATA_ARRAY, SET_ERROR, SET_FUZZY_SEARCH, setFuzzySearch } from '../redux/actions';
+import { setInputText, setSearchName, setDataArray, setError, SET_INPUT_TEXT, SET_SEARCH_NAME, SET_DATA_ARRAY, SET_ERROR, SET_FUZZY_SEARCH, setFuzzySearch, SET_NETWORK_ERROR, setNetworkError, SET_ALL_DATA, setAllData } from '../redux/actions';
+import { testData } from './testData';
 
 describe('Action Creators', () => {
   it('should create an action to set input text', () => {
@@ -45,6 +46,23 @@ describe('Action Creators', () => {
       payload: array,
     };
     expect(setFuzzySearch(array)).toEqual(expectedAction);
+  });
+  
+  it('should create an action to set network error', () => {
+    const err: boolean = true;
+    const expectedAction = {
+      type: SET_NETWORK_ERROR,
+      payload: err,
+    };
+    expect(setNetworkError(err)).toEqual(expectedAction);
+  });
+
+  it('should create an action to set all data', () => {
+    const expectedAction = {
+      type: SET_ALL_DATA,
+      payload: testData,
+    };
+    expect(setAllData(testData)).toEqual(expectedAction);
   });
 
 });
