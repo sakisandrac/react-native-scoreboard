@@ -1,12 +1,9 @@
 import { View, Text, StyleSheet, TextInput, TouchableOpacity, Alert } from 'react-native'
 import React, { useState } from 'react';
 import { postNewUser } from '../apiCalls';
-import { useSelector } from 'react-redux';
-import { setNetworkError } from '../redux/actions';
 
 export default function AddUser() {
 
-  const { networkError } = useSelector((state: any) => state.userReducer);
   const [formError, setFormError] = useState<boolean>(false);
 
   const [form, setForm] = useState({
@@ -24,6 +21,17 @@ export default function AddUser() {
     });
   };
 
+  const resetForm = () => {
+    setForm({
+      bananas: "",
+      lastDayPlayed: "",
+      longestStreak: "",
+      name: "",
+      stars: "",
+      subscribed: "",
+    });
+  }
+
   const showAlert = (error: boolean) => {
     Alert.alert(
       'Message:',
@@ -31,7 +39,10 @@ export default function AddUser() {
       [
         {
           text: 'OK',
-          onPress: () => console.log('OK Pressed'),
+          onPress: () => {
+            console.log('OK Pressed');
+            resetForm();
+          },
         },
       ],
       { cancelable: false }
@@ -39,16 +50,15 @@ export default function AddUser() {
   };
 
   const checkForm = () => {
-    if (form.bananas || form.lastDayPlayed || form.longestStreak || form.name || form.stars || form.subscribed) {
+    if (form.bananas && form.lastDayPlayed && form.longestStreak && form.name && form.stars && form.subscribed) {
       return true;
     }
   }
 
   const handlePress = async () => {
-   
-    if(!checkForm()) {
-      console.log('he')
-      setFormError(false); 
+
+    if(checkForm()) {
+      setFormError(false);
 
       const addNewUser = {
         bananas: parseInt(form.bananas),
@@ -62,22 +72,13 @@ export default function AddUser() {
       try {
         const data = await postNewUser(addNewUser);
         showAlert(false);
-        setForm({
-          bananas: "",
-          lastDayPlayed: "",
-          longestStreak: "",
-          name: "",
-          stars: "",
-          subscribed: "",
-        });
+        resetForm();
       } catch (err) {
-        console.log('EROOR')
         showAlert(true);
         console.error(err);
       }
     } else {
       setFormError(true);
-      console.log('here?')
     };
   };
 
