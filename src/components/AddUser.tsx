@@ -104,7 +104,7 @@ export default function AddUser() {
         style={styles.textInput}
         onChangeText={(text) => updateText('lastDayPlayed', text)}
         value={form.lastDayPlayed}
-        placeholder='yyyy/mm/dd'
+        placeholder='dd/mm/yyyy'
       />
       <Text style={styles.label}>Number of Stars:</Text>
       <TextInput
@@ -123,13 +123,13 @@ export default function AddUser() {
       <Text style={styles.label}>Subscribed:</Text>
       <View style={{ flexDirection: 'row' }}>
         <TouchableOpacity
-          style={styles.textInput}
+          style={{backgroundColor: `${form.subscribed === 'true' ? 'pink' : '#EBE8E8'}`, padding: 1, width: 100, height: 30, justifyContent: 'center', alignItems:'center', borderRadius: 10, margin: 5}}
           onPress={() => updateText('subscribed', 'true')}
         >
           <Text style={{}}>Yes</Text>
         </TouchableOpacity>
         <TouchableOpacity
-          style={styles.textInput}
+          style={{backgroundColor: `${form.subscribed === 'false' ? 'pink' : '#EBE8E8'}`, padding: 1, width: 100, height: 30, justifyContent: 'center', alignItems:'center', borderRadius: 10, margin: 5}}
           onPress={() => updateText('subscribed', 'false')}
         >
           <Text style={{}}>No</Text>
@@ -156,7 +156,7 @@ const styles = StyleSheet.create({
   textInput: {
     borderColor: '#000000',
     height: 40,
-    width: 100,
+    width: 200,
     borderWidth: .5,
     backgroundColor: '#FFF',
     borderRadius: 20,
